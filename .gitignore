@@ -1,0 +1,12 @@
+*.code-workspace
+.vscode/
+
+*tmp*
+
+*.png
+*.mp4
+*.gif
+
+# pycache 
+*.pyc
+__pycache__/
