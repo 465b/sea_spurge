@@ -17,12 +17,12 @@ def run_AU_to_NZ_model(
     chunk_output_dir,
     run_name,
     polygons_to_process,
+    continue_from = None
 ):
     ot = OceanTracker()
 
     ot.settings(
-        output_file_base=run_name,
-        root_output_dir=chunk_output_dir,
+        run_output_dir=chunk_output_dir,
         processors=number_of_threads,
         max_run_duration=3600 * 24 * durationDays,
         time_step=timeStep,
@@ -30,6 +30,8 @@ def run_AU_to_NZ_model(
         use_open_boundary=True,
         time_buffer_size=3,
         write_tracks=False,
+        continuable=True,
+        continue_from = continue_from
     )
 
     ot.add_class(
