@@ -1,4 +1,5 @@
 from oceantracker.main import OceanTracker
+import os
 
 def run_AU_to_NZ_model(
     number_of_threads,
@@ -7,7 +8,7 @@ def run_AU_to_NZ_model(
     hindcast_dir_au,
     hindcast_mask_au,
     hgrid_file_name,
-    durationDays,
+    max_model_duration,
     timeStep,
     releaseStartDate,
     releaseInterval,
@@ -22,16 +23,15 @@ def run_AU_to_NZ_model(
     ot = OceanTracker()
 
     ot.settings(
-        run_output_dir=chunk_output_dir,
+        run_output_dir=os.path.join(chunk_output_dir,run_name),
         processors=number_of_threads,
-        max_run_duration=3600 * 24 * durationDays,
+        max_run_duration=max_model_duration,
         time_step=timeStep,
-        restart_interval=30 * 24 * 3600,
         use_open_boundary=True,
         time_buffer_size=3,
         write_tracks=False,
         continuable=True,
-        continue_from = continue_from
+        continue_from = continue_from,
     )
 
     ot.add_class(
@@ -65,21 +65,20 @@ def run_AU_to_NZ_model(
     for poly in polygons_to_process:
         ot.add_class(
             "release_groups",
-            class_name="oceantracker.release_groups.polygon_release.PolygonRelease",
+            class_name="PolygonRelease",
             name=poly["name"],
             points=poly["points"],
             release_interval=releaseInterval,
             pulse_size=pulseSize,
             release_at_surface=True,
             start=releaseStartDate,
-            duration=durationDays * 24 * 3600,
             max_cycles_to_find_release_points=5,
             max_age=6 * 365 * 24 * 3600,
         )
 
     ot.add_class(
         "particle_statistics",
-        class_name="oceantracker.particle_statistics.polygon_statistics.PolygonStats2D_ageBased",
+        class_name="PolygonStats2D_ageBased",
         name="shore_to_shore_poly_monthly",
         update_interval=statsInterval,
         polygon_list=nz_coastal_polygons,
