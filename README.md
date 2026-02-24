@@ -9,7 +9,7 @@ You'll have to edit it to
 ```
 git clone https://github.com/465b/sea_spurge.git
 cd sea_spurge
-mamba create -n seapurge_cluster python=3.13 pip
+mamba create -n seaspurge_cluster python=3.13 pip
 mamba activate seaspurge_cluster
 pip install oceantracker shapely
 python ./run_ot_for_sea_spurge_AUtoNZ.py
